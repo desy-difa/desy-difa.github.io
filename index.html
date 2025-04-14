@@ -2537,7 +2537,8 @@
                                 data-aos-duration="2500" data-aos-easing="lease-in-cube" data-aos-offset="10"
                                 data-widget_type="text-editor.default">
                                 <div class="elementor-widget-container">
-                                    Nama Tamu </div>
+                                    <div class="nama-tamu">Nama Tamu</div>
+                                </div>
                             </div>
                             <div class="elementor-element elementor-element-5186a880 elementor-absolute elementor-widget__width-inherit wayanGR e-transform elementor-widget elementor-widget-image"
                                 data-id="5186a880" data-element_type="widget"
@@ -5539,7 +5540,7 @@
                         <div class="elementor-widget-container">
                             <p>Made with <img decoding="async" class="emoji" role="img" draggable="false"
                                     src="https://s.w.org/images/core/emoji/13.0.1/svg/2764.svg" alt="❤" /> by
-                                Rumahundangan.id</p>
+                                bocoralus.org</p>
                         </div>
                     </div>
                     <div class="elementor-element elementor-element-10a91257 elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-weddingpress-audio"
@@ -6488,6 +6489,19 @@
             const elHostedVideo = document.querySelector('.slideAwal .elementor-background-video-container video'); if (linkVideo !== "no" && linkVideo !== "") { const isYoutubeVideos = isYoutubeVideoLink(linkVideo); setTimeout(() => { if (!iframeOrVideoLoaded) { toggleButton.classList.add("btnVisibleAfterLoad"); console.log("Slow Network!!! Video Buffered, Force Button Visible After 15 Second") } }, 15000); if (isYoutubeVideos) { } else { elHostedVideo.removeAttribute('autoplay'); setTimeout(() => { toggleButton.classList.add("btnVisibleAfterLoad"); iframeOrVideoLoaded = !0; console.log("Video Loaded") }, 200) } }
             function isYoutubeVideoLink(url) { var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/; var match = url.match(regExp); if (match && match[7].length == 11) { return match[7] } else { return !1 } }
         });</script>
+    
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+
+        if (name) {
+            const container = document.querySelector('.nama-tamu');
+            if (container) {
+                container.textContent = name;
+            }
+        }
+    </script>
+
 </body>
 
 </html>
