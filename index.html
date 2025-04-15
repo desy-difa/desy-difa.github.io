@@ -2043,11 +2043,6 @@
     <meta name="msapplication-TileImage"
         content="https://inv.rumahundangan.id/wp-content/uploads/2023/05/cropped-LOGO-270x270.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- jQuery Countdown plugin -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery-countdown@2.2.0/dist/jquery.countdown.min.js"></script>
 </head>
 
 <body data-rsssl=1
@@ -3930,7 +3925,7 @@
                             <div class="wpkoi-elements-countdown-wrapper">
                                 <div class="wpkoi-elements-countdown-container wpkoi-elements-countdown-label-block ">
                                     <ul id="wpkoi-elements-countdown-6fcef4a7" class="wpkoi-elements-countdown-items"
-                                        data-date="Mar 30 2025 10:00:00">
+                                        data-date="June 15 2025 08:00:00">
                                         <li class="wpkoi-elements-countdown-item">
                                             <div class="wpkoi-elements-countdown-days"><span data-days
                                                     class="wpkoi-elements-countdown-digits">00</span><span
@@ -3960,7 +3955,14 @@
                             <script type="text/javascript">
                                 jQuery(document).ready(function ($) {
                                     'use strict';
-                                    $("#wpkoi-elements-countdown-6fcef4a7").countdown();
+                                    var targetDate = new Date("June 15 2025 08:00:00").getTime();
+
+                                    $("#wpkoi-elements-countdown-6fcef4a7").countdown("2025/06/15 08:00:00", function (event) {
+                                        $(this).find('[data-days]').text(event.offset.totalDays);
+                                        $(this).find('[data-hours]').text(event.offset.hours);
+                                        $(this).find('[data-minutes]').text(event.offset.minutes);
+                                        $(this).find('[data-seconds]').text(event.offset.seconds);
+                                    });
                                 });
                             </script>
 
@@ -6515,7 +6517,7 @@
         }
     </script>
 
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
         jQuery(document).ready(function ($) {
             'use strict';
 
@@ -6528,7 +6530,7 @@
                 $(this).find('[data-seconds]').text(event.offset.seconds);
             });
         });
-    </script>
+    </script> -->
 
 </body>
 
