@@ -5194,8 +5194,7 @@
                                         <div class="cui-clearfix cui-wrap-form ">
                                             <div id='cui-container-form-5640' class='cui-container-form cui-no-login'>
                                                 <div id='respond-5640' class='respond cui-clearfix'>
-                                                    <form action='https://inv.rumahundangan.id/wp-comments-post.php'
-                                                        method='post' id='commentform-5640'>
+                                                    <form id='commentform-5640'>
                                                         <p class="comment-form-author cui-field-1"><input id="author"
                                                                 name="author" type="text" aria-required="true"
                                                                 class="cui-input" placeholder="Nama" /><span
@@ -5243,6 +5242,38 @@
                                                             </p>
                                                         </div>
                                                     </form>
+
+                                                    <script>
+                                                        const form = document.getElementById('commentform-5640');
+
+                                                        form.addEventListener('submit', async function (e) {
+                                                            e.preventDefault(); // Mencegah reload halaman
+
+                                                            const name = document.getElementById('author').value.trim();
+                                                            const comment = document.getElementById('cui-textarea-5640').value.trim();
+                                                            const konfirmasi = document.getElementById('konfirmasi').value;
+
+                                                            if (!name || !comment || !konfirmasi) {
+                                                                alert("Mohon lengkapi semua data.");
+                                                                return;
+                                                            }
+
+                                                            try {
+                                                                await db.collection('comments').add({
+                                                                    name: name,
+                                                                    comment: comment,
+                                                                    konfirmasi: konfirmasi,
+                                                                    timestamp: new Date()
+                                                                });
+
+                                                                alert("Ucapan berhasil dikirim!");
+                                                                form.reset(); // Reset form setelah kirim
+                                                            } catch (error) {
+                                                                console.error("Error mengirim data: ", error);
+                                                                alert("Terjadi kesalahan. Silakan coba lagi.");
+                                                            }
+                                                        });
+                                                    </script>
                                                 </div>
                                             </div><!--.cui-container-form-->
                                         </div><!--.cui-clearfix cui-relative-->
@@ -6496,21 +6527,26 @@
             }
         }
     </script>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxO8uPQbwglc392DTj4bxWLGDoGs238pw",
+            authDomain: "guest-comments-2fddf.firebaseapp.com",
+            projectId: "guest-comments-2fddf",
+            storageBucket: "guest-comments-2fddf.firebasestorage.app",
+            messagingSenderId: "438167748721",
+            appId: "1:438167748721:web:5a528c9aba1d937c46dbd0",
+            measurementId: "G-ZR3VE3B5SR"
+        };
 
-    <!-- <script type="text/javascript">
-        jQuery(document).ready(function ($) {
-            'use strict';
-
-            var targetDate = new Date("June 15 2025 08:00:00").getTime();
-
-            $("#wpkoi-elements-countdown-6fcef4a7").countdown("2025/06/15 08:00:00", function (event) {
-                $(this).find('[data-days]').text(event.offset.totalDays);
-                $(this).find('[data-hours]').text(event.offset.hours);
-                $(this).find('[data-minutes]').text(event.offset.minutes);
-                $(this).find('[data-seconds]').text(event.offset.seconds);
-            });
-        });
-    </script> -->
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
 
 </body>
 
