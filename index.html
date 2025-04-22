@@ -6175,8 +6175,7 @@
                     const div = document.createElement("div");
                     div.className = "guest bg-white shadow-md rounded-lg p-4 border border-gray-200";
                     div.innerHTML = `
-                        <p class="text-lg font-semibold text-gray-800">${data.name}</p>
-                        <p class="text-sm text-gray-600"><strong>Kehadiran:</strong> ${data.attendance || 'Tidak diketahui'}</p>
+                        <p class="text-sm font-semibold text-gray-800" style="color: #7A7A7A !important">${data.name}${data.attendance === 'Hadir' ? `<span class="text-green-500 text-xs ml-1">✅</span>` : ''}</p>
                         <p class="mt-2 text-gray-700">${data.message}</p>
                         `;
                     guestList.appendChild(div);
