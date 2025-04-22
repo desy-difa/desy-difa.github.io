@@ -2017,14 +2017,10 @@
             src: url('https://inv.rumahundangan.id/wp-content/uploads/useanyfont/3879Parisienne.woff2') format('woff2');
         }
     </style>
-    <link rel="icon" href="https://i.imgur.com/TYPCnU6.png"
-        sizes="60x60" />
-    <link rel="icon" href="https://i.imgur.com/TYPCnU6.png"
-        sizes="192x192" />
-    <link rel="apple-touch-icon"
-        href="https://i.imgur.com/TYPCnU6.png" />
-    <meta name="msapplication-TileImage"
-        content="https://i.imgur.com/TYPCnU6.png" />
+    <link rel="icon" href="https://i.imgur.com/TYPCnU6.png" sizes="60x60" />
+    <link rel="icon" href="https://i.imgur.com/TYPCnU6.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="https://i.imgur.com/TYPCnU6.png" />
+    <meta name="msapplication-TileImage" content="https://i.imgur.com/TYPCnU6.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -4353,7 +4349,7 @@
                                         data-height="1535" aria-label="" role="img"></div>
                                     <div class="elementor-gallery-item__overlay"></div>
                                 </a>
-                                
+
                                 <a class="e-gallery-item elementor-gallery-item elementor-animated-content"
                                     href="https://i.imgur.com/03DCoCL.jpg" data-elementor-open-lightbox="yes"
                                     data-elementor-lightbox-slideshow="5f993419"
@@ -4372,7 +4368,7 @@
                                         data-height="1536" aria-label="" role="img"></div>
                                     <div class="elementor-gallery-item__overlay"></div>
                                 </a>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -4834,9 +4830,7 @@
                         data-widget_type="weddingpress-kit2.default">
                         <div class="elementor-widget-container">
                             <div class="max-w-xl mx-auto p-4">
-                                <h1 class="text-2xl font-bold mb-6 text-center">Buku Tamu</h1>
-
-                                <form id="guestbookForm" class="space-y-4 bg-white p-6 rounded-lg shadow-md">
+                                <form id="guestbookForm" class="space-y-4 bg-white mb-3 p-6 rounded-lg shadow-md">
                                     <div>
                                         <label for="name" class="block text-sm font-medium text-gray-700">Nama
                                             Anda</label>
@@ -4866,15 +4860,17 @@
 
                                     <div>
                                         <button type="submit"
-                                            class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition">
+                                            class="w-full bg-gray-600 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md transition" style="border: grey;">
                                             Kirim
                                         </button>
                                     </div>
                                 </form>
 
-                                <div id="guestList" class="mt-8">
-                                    <h2 class="text-xl font-semibold mt-1 mb-4">Pesan Tamu:</h2>
-                                    <!-- Daftar tamu akan muncul di sini -->
+                                <div id="guestList" class="p-4"></div>
+                                <div class="text-center mt-6">
+                                    <button id="loadMoreBtn" class="px-4 py-2 bg-gray-600 hover:bg-gray-600 text-white rounded" style="border: grey;">
+                                        Load More
+                                    </button>
                                 </div>
                             </div>
                             <style>
@@ -4944,7 +4940,8 @@
                         </div>
                     </div>
                     <div class="elementor-element elementor-element-2cfcdb63 e-con-full revealatas e-flex e-con e-child"
-                        data-id="2cfcdb63" data-element_type="container" style="background-image: url(https://i.imgur.com/EhiNr3t.jpg);"
+                        data-id="2cfcdb63" data-element_type="container"
+                        style="background-image: url(https://i.imgur.com/EhiNr3t.jpg);"
                         data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
                         <div class="elementor-element elementor-element-7164302f elementor-widget elementor-widget-spacer"
                             data-id="7164302f" data-element_type="widget" data-widget_type="spacer.default">
@@ -6161,23 +6158,67 @@
                 }
             });
 
-            // Ambil data dari Firestore secara real-time
-            db.collection("guestbook")
-                .orderBy("timestamp", "desc")
-                .onSnapshot(snapshot => {
-                    guestList.innerHTML = "<h2 class='text-xl font-bold mb-4'>Pesan Tamu:</h2>";
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        const div = document.createElement("div");
-                        div.className = "guest bg-white shadow-md rounded-lg p-4 border border-gray-200";
-                        div.innerHTML = `
-                            <p class="text-lg font-semibold text-gray-800">${data.name}</p>
-                            <p class="text-sm text-gray-600"><strong>Kehadiran:</strong> ${data.attendance || 'Tidak diketahui'}</p>
-                            <p class="mt-2 text-gray-700">${data.message}</p>
+            let lastVisible = null;
+            const pageSize = 5;
+
+            function renderComments(snapshot) {
+                // guestList.innerHTML = "<h2 class='text-xl font-bold mt-4'>Pesan Tamu:</h2>";
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const div = document.createElement("div");
+                    div.className = "guest bg-white shadow-md rounded-lg p-4 border border-gray-200";
+                    div.innerHTML = `
+                        <p class="text-lg font-semibold text-gray-800">${data.name}</p>
+                        <p class="text-sm text-gray-600"><strong>Kehadiran:</strong> ${data.attendance || 'Tidak diketahui'}</p>
+                        <p class="mt-2 text-gray-700">${data.message}</p>
                         `;
-                        guestList.appendChild(div);
-                    });
+                    guestList.appendChild(div);
                 });
+
+                lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            }
+
+            function loadInitialComments() {
+                db.collection("guestbook")
+                    .orderBy("timestamp", "desc")
+                    .limit(pageSize)
+                    .get()
+                    .then(renderComments);
+            }
+
+            function loadMoreComments() {
+                if (!lastVisible) return;
+                db.collection("guestbook")
+                    .orderBy("timestamp", "desc")
+                    .startAfter(lastVisible)
+                    .limit(pageSize)
+                    .get()
+                    .then(renderComments);
+            }
+
+            document.getElementById("loadMoreBtn").addEventListener("click", loadMoreComments);
+
+            loadInitialComments();
+
+            // Ambil data dari Firestore secara real-time
+            // db.collection("guestbook")
+            //     .orderBy("timestamp", "desc")
+            //     .onSnapshot(snapshot => {
+            //         guestList.innerHTML = "<h2 class='text-xl font-bold mb-4'>Pesan Tamu:</h2>";
+            //         snapshot.forEach(doc => {
+            //             const data = doc.data();
+            //             const div = document.createElement("div");
+            //             div.className = "guest bg-white shadow-md rounded-lg p-4 border border-gray-200";
+            //             div.innerHTML = `
+            //                 <p class="text-lg font-semibold text-gray-800">${data.name}</p>
+            //                 <p class="text-sm text-gray-600"><strong>Kehadiran:</strong> ${data.attendance || 'Tidak diketahui'}</p>
+            //                 <p class="mt-2 text-gray-700">${data.message}</p>
+            //             `;
+            //             guestList.appendChild(div);
+            //         });
+            //         lastVisible = snapshot.docs[snapshot.docs.length - 1];
+            //     }
+            //     );
         });
     </script>
 
