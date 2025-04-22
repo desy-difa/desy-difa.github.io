@@ -4860,7 +4860,8 @@
 
                                     <div>
                                         <button type="submit"
-                                            class="w-full bg-gray-600 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-md transition" style="border: grey;">
+                                            class="w-full text-white font-semibold py-2 px-4 rounded-md transition"
+                                            style="border: grey; background-color: #AE8F7A !important">
                                             Kirim
                                         </button>
                                     </div>
@@ -4868,7 +4869,9 @@
 
                                 <div id="guestList" class="p-4"></div>
                                 <div class="text-center mt-6">
-                                    <button id="loadMoreBtn" class="px-4 py-2 bg-gray-600 hover:bg-gray-600 text-white rounded" style="border: grey;">
+                                    <button id="loadMoreBtn"
+                                        class="px-4 py-2 bg-gray-600 hover:bg-gray-600 text-white rounded"
+                                        style="border: grey;">
                                         Load More
                                     </button>
                                 </div>
@@ -5160,6 +5163,7 @@
                             <p>Made with <img decoding="async" class="emoji" role="img" draggable="false"
                                     src="https://s.w.org/images/core/emoji/13.0.1/svg/2764.svg" alt="❤" /> by
                                 albatech</p>
+                            <p>0857-7700-7002</p>
                         </div>
                     </div>
                     <div class="elementor-element elementor-element-10a91257 elementor-view-stacked elementor-shape-circle elementor-widget elementor-widget-weddingpress-audio"
@@ -6153,8 +6157,11 @@
                         message: message,
                         attendance: attendance,
                         timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        form.reset(); // kosongkan form setelah submit
+                    }).catch((error) => {
+                        console.error("Error adding message: ", error);
                     });
-                    form.reset();
                 }
             });
 
@@ -6182,8 +6189,10 @@
                 db.collection("guestbook")
                     .orderBy("timestamp", "desc")
                     .limit(pageSize)
-                    .get()
-                    .then(renderComments);
+                    .onSnapshot(snapshot => {
+                        guestList.innerHTML = ""; // Bersihkan agar tidak dobel
+                        renderComments(snapshot);
+                    });
             }
 
             function loadMoreComments() {
